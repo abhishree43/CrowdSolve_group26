@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
 @RestController
 @RequestMapping("/complaints")
 public class ComplaintController {
@@ -18,7 +16,7 @@ public class ComplaintController {
     private ComplaintRepository complaintRepo;
 
     @Autowired
-    private CitizenRepository citizenRepo;
+    private CitizenRepository userRepo;
 
     // Create a complaint for a specific citizen
     @PostMapping("/{citizenId}")
