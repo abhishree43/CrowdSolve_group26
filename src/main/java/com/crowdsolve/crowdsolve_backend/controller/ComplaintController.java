@@ -1,10 +1,9 @@
 package com.crowdsolve.crowdsolve_backend.controller;
 
-
+import com.crowdsolve.crowdsolve_backend.model.citizen;
 import com.crowdsolve.crowdsolve_backend.model.Complaint;
-import com.crowdsolve.crowdsolve_backend.model.User;
+import com.crowdsolve.crowdsolve_backend.repository.CitizenRepository;
 import com.crowdsolve.crowdsolve_backend.repository.ComplaintRepository;
-import com.crowdsolve.crowdsolve_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +17,17 @@ public class ComplaintController {
     private ComplaintRepository complaintRepo;
 
     @Autowired
-    private UserRepository userRepo;
+    private CitizenRepository citizenRepo;
 
-    @PostMapping("/{userId}")
-    public Complaint createComplaint(@PathVariable Long userId, @RequestBody Complaint complaint) {
-        User user = userRepo.findById(userId).orElseThrow();
-        complaint.setUser(user);
+    // Create a complaint for a specific citizen
+    @PostMapping("/{citizenId}")
+    public Complaint createComplaint(@PathVariable Long citizenId, @RequestBody Complaint complaint) {
+        citizen citizen = citizenRepo.findById(citizenId).orElseThrow();
+        complaint.setCitizen(citizen);   // link complaint to citizen
         return complaintRepo.save(complaint);
     }
 
+    // Get all complaints
     @GetMapping
     public List<Complaint> getAllComplaints() {
         return complaintRepo.findAll();

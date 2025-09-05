@@ -5,10 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CrowdsolveBackendApplication {
-
-	public static void main(String[] args) {
-
+    public static void main(String[] args) {
         SpringApplication.run(CrowdsolveBackendApplication.class, args);
-	}
-
+    }
 }
