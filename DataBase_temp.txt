@@ -1,0 +1,50 @@
+-- Using this you can create the database. Run this code in MySql 
+-- This is temproary database. you can update any changes related to tables in this.
+-- create DB & user
+CREATE DATABASE civic_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'civic_user'@'localhost' IDENTIFIED BY 'civic_pass';
+GRANT ALL PRIVILEGES ON civic_db.* TO 'civic_user'@'localhost';
+FLUSH PRIVILEGES;
+
+USE civic_db;
+
+-- users table
+CREATE TABLE users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('CITIZEN','ADMIN','AUTHORITY') NOT NULL,
+  department VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- complaints table
+CREATE TABLE complaints (
+  complaint_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  title VARCHAR(200),
+  description TEXT,
+  photo_path VARCHAR(255),
+  latitude DOUBLE,
+  longitude DOUBLE,
+  location VARCHAR(255),
+  category ENUM('Garbage','Streetlight','Pothole','Other') DEFAULT 'Other',
+  status ENUM('Pending','In Progress','Resolved') DEFAULT 'Pending',
+  assigned_to INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL,
+  FOREIGN KEY (assigned_to) REFERENCES users(user_id) ON DELETE SET NULL
+);
+
+-- complaint_updates (history)
+CREATE TABLE complaint_updates (
+  update_id INT AUTO_INCREMENT PRIMARY KEY,
+  complaint_id INT,
+  updated_by INT,
+  status ENUM('Pending','In Progress','Resolved'),
+  remark TEXT,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (complaint_id) REFERENCES complaints(complaint_id) ON DELETE CASCADE
+);
