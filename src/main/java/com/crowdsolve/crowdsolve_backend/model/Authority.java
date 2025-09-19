@@ -15,4 +15,5 @@ public class Authority {
     private String deptName;
     private String contactEmail;
     private String contactPhone;
+    private String password;
 }
